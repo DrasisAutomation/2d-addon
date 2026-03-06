@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Connection Mode • Home Automation</title>
+    <!-- Removed all CDN links for Google Fonts and Material Symbols -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --google-blue: #1a73e8;
+            --google-blue-hover: #0d62d9;
+            --google-gray-50: #f8f9fa;
+            --google-gray-100: #f1f3f4;
+            --google-gray-200: #e8eaed;
+            --google-gray-300: #dadce0;
+            --google-gray-400: #bdc1c6;
+            --google-gray-700: #5f6368;
+            --google-gray-900: #202124;
+            --google-green: #34a853;
+            --google-green-hover: #2e9950;
+            --shadow-1: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+            --shadow-2: 0 2px 6px 2px rgba(60, 64, 67, 0.15), 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+            --shadow-3: 0 4px 8px 3px rgba(60, 64, 67, 0.15), 0 1px 3px 0 rgba(60, 64, 67, 0.3);
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            /* Using system font stack instead of Google Sans */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--google-gray-900);
+            line-height: 1.5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-3);
+            overflow: hidden;
+            animation: cardEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header {
+            padding: 40px 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--google-gray-200);
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--google-blue) 0%, #4285f4 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            box-shadow: var(--shadow-2);
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--google-gray-900);
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--google-gray-700);
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 32px 40px 40px;
+        }
+
+        .mode-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .mode-card {
+            background: white;
+            border: 2px solid var(--google-gray-200);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-card:hover {
+            border-color: var(--google-blue);
+            box-shadow: var(--shadow-2);
+            transform: translateY(-2px);
+        }
+
+        .mode-card.selected {
+            border-color: var(--google-blue);
+            background: rgba(26, 115, 232, 0.04);
+            box-shadow: var(--shadow-1);
+        }
+
+        .mode-card.selected::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--google-blue);
+        }
+
+        .mode-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .mode-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .mode-card.selected .mode-icon {
+            transform: scale(1.05);
+        }
+
+        .remote-icon {
+            background: linear-gradient(135deg, var(--google-blue) 0%, #4285f4 100%);
+        }
+
+        .local-icon {
+            background: linear-gradient(135deg, var(--google-green) 0%, #0f9d58 100%);
+        }
+
+        .mode-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .mode-title-container {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .mode-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--google-gray-900);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .selected-indicator {
+            color: var(--google-blue);
+            font-size: 20px;
+            opacity: 0;
+            transform: scale(0);
+            transition: var(--transition);
+        }
+
+        .selected-indicator svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .mode-card.selected .selected-indicator {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .mode-description {
+            font-size: 14px;
+            color: var(--google-gray-700);
+            line-height: 1.5;
+        }
+
+        .connection-details {
+            background: var(--google-gray-50);
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .connection-details.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .connection-details h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--google-gray-900);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            color: var(--google-gray-700);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .detail-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .detail-text {
+            font-size: 14px;
+            color: var(--google-gray-700);
+            line-height: 1.5;
+        }
+
+        .detail-text strong {
+            color: var(--google-gray-900);
+            font-weight: 500;
+        }
+
+        .connect-button {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--google-blue);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: var(--shadow-1);
+        }
+
+        .connect-button:hover {
+            background: var(--google-blue-hover);
+            box-shadow: var(--shadow-2);
+            transform: translateY(-1px);
+        }
+
+        .connect-button:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-1);
+        }
+
+        .connect-button:disabled {
+            background: var(--google-gray-300);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .version {
+            font-size: 12px;
+            color: var(--google-gray-400);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .loading-dots {
+            display: none;
+            gap: 4px;
+        }
+
+        .loading-dots.visible {
+            display: flex;
+        }
+
+        .loading-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header {
+                padding: 32px 24px 20px;
+            }
+
+            .content {
+                padding: 14px 14px 22px;
+            }
+
+            .mode-card {
+                padding: 16px;
+            }
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(26, 115, 232, 0.2);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo-container">
+                    <!-- Replaced Material Symbols with inline SVG -->
+                    <svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <h1 class="title">Home Automation</h1>
+                <p class="subtitle">Select your preferred connection method</p>
+            </div>
+
+            <div class="content">
+                <div class="mode-buttons">
+                    <div class="mode-card" data-mode="remote">
+                        <div class="mode-header">
+                            <div class="mode-icon remote-icon">
+                                <!-- Cloud icon -->
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 5-5 5 5 0 0 0-5-5z"></path>
+                                </svg>
+                            </div>
+                            <div class="mode-title-container">
+                                <div class="mode-title">
+                                    <span>Remote Connection</span>
+                                    <span class="selected-indicator">
+                                        <!-- Check circle icon -->
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mode-description">
+                                    Connect via cloud server. Best for accessing your home automation system from
+                                    anywhere.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="connection-details" id="remoteDetails">
+                            <h4>Connection Details</h4>
+                            <div class="detail-item">
+                                <span class="detail-icon">
+                                    <!-- DNS icon -->
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <!-- Cloud base -->
+                                        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+
+                                        <!-- Server inside cloud -->
+                                        <rect x="8" y="11" width="8" height="6" rx="1" stroke-width="1"></rect>
+                                        <line x1="10" y1="13" x2="10" y2="16"></line>
+                                        <line x1="12" y1="13" x2="12" y2="16"></line>
+                                        <line x1="14" y1="13" x2="14" y2="16"></line>
+
+                                        <!-- Signal waves -->
+                                        <path d="M6 16a2 2 0 0 1-2-2" stroke-width="1.2"></path>
+                                        <path d="M4 20a4 4 0 0 1-4-4" stroke-width="1"></path>
+                                    </svg>
+                                </span>
+                                <div class="detail-text">
+                                    <strong>Server:</strong> Remote Access
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">
+                                    <!-- Lock icon -->
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </span>
+                                <div class="detail-text">
+                                    <strong>Protocol:</strong> Secure WebSocket (WSS)
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">
+                                    <!-- Globe icon -->
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path
+                                            d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <div class="detail-text">
+                                    <strong>Best for:</strong> Access from outside your home network
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mode-card" data-mode="local">
+                        <div class="mode-header">
+                            <div class="mode-icon local-icon">
+                                <!-- Router icon -->
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <!-- Router base -->
+                                    <rect x="6" y="14" width="12" height="4" rx="1"></rect>
+
+                                    <!-- Wi-Fi signal arcs -->
+                                    <path d="M12 20c-3.31 0-6-2.69-6-6"></path>
+                                    <path d="M12 20c-1.66 0-3-1.34-3-3"></path>
+                                    <path d="M12 20c0-1.1.9-2 2-2s2 .9 2 2"></path>
+
+                                    <!-- Antennas -->
+                                    <line x1="9" y1="14" x2="9" y2="10"></line>
+                                    <line x1="15" y1="14" x2="15" y2="10"></line>
+                                    <circle cx="9" cy="8" r="1"></circle>
+                                    <circle cx="15" cy="8" r="1"></circle>
+
+                                    <!-- Status lights -->
+                                    <circle cx="10" cy="16" r="0.8" fill="#4CAF50"></circle>
+                                    <circle cx="12" cy="16" r="0.8" fill="#2196F3"></circle>
+                                    <circle cx="14" cy="16" r="0.8" fill="#4CAF50"></circle>
+                                </svg>
+                            </div>
+                            <div class="mode-title-container">
+                                <div class="mode-title">
+                                    <span>Local Network</span>
+                                    <span class="selected-indicator">
+                                        <!-- Check circle icon -->
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="mode-description">
+                                    Connect directly within your home network. Faster response and works without
+                                    internet.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="connection-details" id="localDetails">
+                            <h4>Connection Details</h4>
+                            <div class="detail-item">
+                                <span class="detail-icon">
+                                    <!-- Home icon -->
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                    </svg>
+                                </span>
+                                <div class="detail-text">
+                                    <strong>Server:</strong> Local Home Assistant instance
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">
+                                    <!-- WiFi icon -->
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path
+                                            d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.94 0">
+                                        </path>
+                                        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                                    </svg>
+                                </span>
+                                <div class="detail-text">
+                                    <strong>Requirements:</strong> Must be on the same network
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">
+                                    <!-- Bolt icon -->
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                </span>
+                                <div class="detail-text">
+                                    <strong>Best for:</strong> Local access with fastest response time
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="connect-button" id="connectBtn">
+                    <span class="button-text">Connect to Dashboard</span>
+                    <span class="button-icon">
+                        <!-- Arrow forward icon -->
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </span>
+                    <div class="loading-dots" id="loadingDots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+
+                <div class="footer">
+                    <div class="version">Version 2.0 • Offline Ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load config.js first
+        const configScript = document.createElement('script');
+        configScript.src = 'config.js';
+        configScript.onload = () => {
+            console.log('Configuration loaded successfully');
+            // Enable connect button if config is loaded
+            const connectBtn = document.getElementById('connectBtn');
+            if (window.CONFIG) {
+                connectBtn.disabled = false;
+            }
+        };
+        configScript.onerror = () => {
+            console.error('Failed to load configuration');
+            alert('Configuration file not found. Please ensure config.js exists.');
+        };
+        document.head.appendChild(configScript);
+
+        let selectedMode = null;
+
+        // Create ripple effect function
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement('span');
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+            circle.classList.add('ripple');
+
+            const ripple = button.getElementsByClassName('ripple')[0];
+            if (ripple) {
+                ripple.remove();
+            }
+
+            button.appendChild(circle);
+        }
+
+        // Mode selection
+        document.querySelectorAll('.mode-card').forEach(card => {
+            card.addEventListener('click', (event) => {
+                createRipple(event);
+
+                const mode = card.dataset.mode;
+
+                // Remove selected class from all cards
+                document.querySelectorAll('.mode-card').forEach(c => {
+                    c.classList.remove('selected');
+                });
+
+                // Add selected class to clicked card
+                card.classList.add('selected');
+
+                // Hide all connection details
+                document.querySelectorAll('.connection-details').forEach(details => {
+                    details.classList.remove('visible');
+                });
+
+                // Show appropriate details with animation
+                setTimeout(() => {
+                    document.getElementById(`${mode}Details`).classList.add('visible');
+                }, 150);
+
+                selectedMode = mode;
+
+                // Update button state
+                updateConnectButton();
+            });
+        });
+
+        // Update connect button state
+        function updateConnectButton() {
+            const connectBtn = document.getElementById('connectBtn');
+            const buttonText = connectBtn.querySelector('.button-text');
+
+            if (selectedMode === 'local') {
+                buttonText.textContent = 'Connect via Local Network';
+            } else {
+                buttonText.textContent = 'Connect via Cloud';
+            }
+        }
+
+        // Connect button functionality
+        document.getElementById('connectBtn').addEventListener('click', async (event) => {
+            createRipple(event);
+
+            if (!selectedMode) {
+                alert('Please select a connection mode first.');
+                return;
+            }
+
+            // Show loading state
+            const connectBtn = document.getElementById('connectBtn');
+            const buttonText = connectBtn.querySelector('.button-text');
+            const buttonIcon = connectBtn.querySelector('.button-icon');
+            const loadingDots = document.getElementById('loadingDots');
+
+            connectBtn.disabled = true;
+            buttonText.textContent = 'Connecting';
+            buttonIcon.style.display = 'none';
+            loadingDots.classList.add('visible');
+
+            // Use values from CONFIG object
+            let config = {};
+
+            try {
+                if (selectedMode === 'remote') {
+                    if (!CONFIG.remote?.WS_URL || !CONFIG.remote?.TOKEN) {
+                        throw new Error('Remote configuration is incomplete. Please check config.js');
+                    }
+
+                    config = {
+                        mode: 'remote',
+                        wsUrl: CONFIG.remote.WS_URL,
+                        token: CONFIG.remote.TOKEN
+                    };
+                } else if (selectedMode === 'local') {
+                    if (!CONFIG.local?.WS_URL || !CONFIG.local?.TOKEN) {
+                        throw new Error('Local connection is not configured. Please configure it in config.js first.');
+                    }
+
+                    config = {
+                        mode: 'local',
+                        wsUrl: CONFIG.local.WS_URL,
+                        token: CONFIG.local.TOKEN
+                    };
+                }
+
+                // Save last used mode
+                localStorage.setItem('lastConnectionMode', selectedMode);
+
+                // Store config in sessionStorage for the main app
+                sessionStorage.setItem('connectionConfig', JSON.stringify(config));
+
+                // Simulate connection delay for better UX
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                // Redirect to main app
+                window.location.href = 'index.html';
+
+            } catch (error) {
+                // Reset button state
+                connectBtn.disabled = false;
+                buttonIcon.style.display = 'inline-flex';
+                loadingDots.classList.remove('visible');
+                updateConnectButton();
+
+                // Show error
+                alert(error.message);
+                console.error('Connection error:', error);
+            }
+        });
+
+        // Auto-select last used mode
+        document.addEventListener('DOMContentLoaded', () => {
+            const lastMode = localStorage.getItem('lastConnectionMode');
+
+            if (lastMode) {
+                const card = document.querySelector(`.mode-card[data-mode="${lastMode}"]`);
+                if (card) {
+                    card.click();
+                }
+            }
+
+            // Auto-select remote if no last mode
+            else {
+                setTimeout(() => {
+                    document.querySelector('.mode-card[data-mode="remote"]').click();
+                }, 300);
+            }
+
+            // Add ripple effects to all clickable elements
+            document.querySelectorAll('.mode-card, .connect-button').forEach(element => {
+                element.addEventListener('click', createRipple);
+            });
+
+            // Disable connect button initially until config loads
+            document.getElementById('connectBtn').disabled = true;
+        });
+    </script>
+</body>
+
+</html>

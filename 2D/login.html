@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HA License Admin Panel</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Google Sans', Arial, sans-serif;
+    }
+
+    body {
+      background: #f8f9fa;
+      color: #202124;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* Header */
+    .header {
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #4285f4, #34a853);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 500;
+      color: #5f6368;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      color: #4285f4;
+      font-weight: 700;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: #4285f4;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    /* Login Container */
+    .login-container {
+      max-width: 480px;
+      margin: 80px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 48px;
+      text-align: center;
+    }
+
+    .login-title {
+      font-size: 28px;
+      font-weight: 500;
+      color: #202124;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      color: #5f6368;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #5f6368;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #4285f4;
+      box-shadow: 0 0 0 2px rgba(66,133,244,0.2);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #1a73e8;
+      color: white;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: #0d62d9;
+      box-shadow: 0 2px 6px rgba(26,115,232,0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #5f6368;
+      border: 1px solid #dadce0;
+    }
+
+    .btn-secondary:hover {
+      background: #f8f9fa;
+    }
+
+    .btn-success {
+      background: #34a853;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #2d9249;
+    }
+
+    .btn-danger {
+      background: #ea4335;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #d33a2d;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #1a73e8;
+      border: 1px solid #dadce0;
+    }
+
+    .btn-outline:hover {
+      background: #f0f7ff;
+    }
+
+    /* Admin Panel */
+    .admin-container {
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 500;
+      color: #202124;
+    }
+
+    /* Search & Filter */
+    .search-container {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 300px;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5f6368;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 16px 16px 48px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #4285f4;
+      box-shadow: 0 0 0 2px rgba(66,133,244,0.2);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: 1px solid #dadce0;
+      background: white;
+      color: #5f6368;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background: #e8f0fe;
+      color: #1a73e8;
+      border-color: #d2e3fc;
+    }
+
+    .filter-btn:hover {
+      background: #f8f9fa;
+    }
+
+    /* Cards */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #202124;
+      word-break: break-all;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .status-allow {
+      background: #e6f4ea;
+      color: #137333;
+    }
+
+    .status-decline {
+      background: #fce8e6;
+      color: #c5221f;
+    }
+
+    .card-details {
+      margin-bottom: 20px;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f1f3f4;
+    }
+
+    .detail-label {
+      color: #5f6368;
+      font-size: 14px;
+    }
+
+    .detail-value {
+      color: #202124;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Insert Keys Section */
+    .insert-keys-section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .keys-textarea {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: monospace;
+      resize: vertical;
+      margin-bottom: 24px;
+      min-height: 120px;
+    }
+
+    .keys-textarea:focus {
+      outline: none;
+      border-color: #4285f4;
+      box-shadow: 0 0 0 2px rgba(66,133,244,0.2);
+    }
+
+    /* Stats */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .stat-icon.blue {
+      background: #e8f0fe;
+      color: #1a73e8;
+    }
+
+    .stat-icon.green {
+      background: #e6f4ea;
+      color: #34a853;
+    }
+
+    .stat-icon.red {
+      background: #fce8e6;
+      color: #ea4335;
+    }
+
+    .stat-info h3 {
+      font-size: 14px;
+      color: #5f6368;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 600;
+      color: #202124;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #202124;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: #34a853;
+    }
+
+    .toast.error {
+      background: #ea4335;
+    }
+
+    .toast.info {
+      background: #1a73e8;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 48px;
+      color: #5f6368;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #f1f3f4;
+      border-top: 4px solid #1a73e8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-container {
+        padding: 16px;
+      }
+      
+      .cards-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-container {
+        flex-direction: column;
+      }
+      
+      .search-box {
+        min-width: 100%;
+      }
+      
+      .toast {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast">
+  <i class="fas fa-info-circle"></i>
+  <span id="toastMessage">Message</span>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo-container">
+    <div class="logo">
+      <i class="fas fa-key"></i>
+    </div>
+  </div>
+  
+  <div class="user-info" id="userInfo" style="display: none;">
+    <div class="user-avatar" id="userAvatar">A</div>
+    <button class="btn btn-secondary" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+
+<!-- Login Container -->
+<div id="loginContainer" class="login-container">
+  <div class="logo" style="margin: 0 auto 24px; width: 64px; height: 64px;">
+    <i class="fas fa-key" style="font-size: 28px;"></i>
+  </div>
+  
+  <h1 class="login-title">Admin Login</h1>
+  <p class="login-subtitle">Sign in to manage your license keys</p>
+  
+  <div class="input-group">
+    <label class="input-label">Email Address</label>
+    <input type="email" id="email" class="input-field" placeholder="admin@example.com">
+  </div>
+  
+  <div class="input-group">
+    <label class="input-label">Password</label>
+    <input type="password" id="password" class="input-field" placeholder="Enter your password">
+  </div>
+  
+  <button class="btn btn-primary" onclick="login()">
+    <i class="fas fa-sign-in-alt"></i> Sign In
+  </button>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" class="admin-container" style="display: none;">
+  <!-- Stats -->
+  <div class="stats-container" id="statsContainer">
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <i class="fas fa-key"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Total Licenses</h3>
+        <div class="stat-value" id="totalLicenses">0</div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Active</h3>
+        <div class="stat-value" id="activeLicenses">0</div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon red">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Inactive</h3>
+        <div class="stat-value" id="inactiveLicenses">0</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Insert Keys Section -->
+  <div class="insert-keys-section">
+    <div class="section-header">
+      <h2 class="section-title">Add License Keys</h2>
+    </div>
+    
+    <textarea 
+      id="keysInput" 
+      class="keys-textarea" 
+      placeholder="HA-2025-0001&#10;HA-2025-0002&#10;HA-2025-0003"></textarea>
+    
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <button class="btn btn-secondary" onclick="clearKeysInput()">
+        <i class="fas fa-times"></i> Clear
+      </button>
+      <button class="btn btn-success" onclick="insertKeys()">
+        <i class="fas fa-plus"></i> Insert Keys
+      </button>
+    </div>
+  </div>
+  
+  <!-- Search & Filter -->
+  <div class="admin-header">
+    <h2 class="section-title">License Keys</h2>
+    
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="search-input" 
+          placeholder="Search license keys..."
+          onkeyup="filterLicenses()">
+      </div>
+      
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="setFilter('all')">All</button>
+        <button class="filter-btn" onclick="setFilter('allow')">Active</button>
+        <button class="filter-btn" onclick="setFilter('decline')">Inactive</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- License Cards -->
+  <div class="cards-container" id="licenseList"></div>
+  
+  <!-- Loading -->
+  <div id="loadingIndicator" class="loading" style="display: none;">
+    <div class="loading-spinner"></div>
+    <p>Loading license data...</p>
+  </div>
+  
+  <!-- Empty State -->
+  <div id="emptyState" class="loading" style="display: none;">
+    <div style="font-size: 48px; color: #dadce0; margin-bottom: 16px;">
+      <i class="fas fa-key"></i>
+    </div>
+    <h3>No license keys found</h3>
+    <p style="margin-top: 8px; color: #5f6368;">Add your first license key using the form above</p>
+  </div>
+</div>
+
+<!-- Firebase v9 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    doc,
+    setDoc,
+    getDocs,
+    updateDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+  // 🔥 Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCgDPotM7W7Rlyl4RCajKb1PiA3ekeIA9Q",
+    authDomain: "license-ha.firebaseapp.com",
+    projectId: "license-ha",
+    storageBucket: "license-ha.firebasestorage.app",
+    messagingSenderId: "369998064376",
+    appId: "1:369998064376:web:85770ffa657fa95254690d",
+    measurementId: "G-229RD1C715"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  const licensesRef = collection(db, "licenses");
+  
+  let allLicenses = [];
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  // Toast notification function
+  function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toastMessage.textContent = message;
+    toast.className = `toast ${type}`;
+    
+    // Remove all icon classes
+    const icon = toast.querySelector('i');
+    icon.className = '';
+    
+    // Set appropriate icon
+    if (type === 'success') {
+      icon.className = 'fas fa-check-circle';
+    } else if (type === 'error') {
+      icon.className = 'fas fa-exclamation-circle';
+    } else {
+      icon.className = 'fas fa-info-circle';
+    }
+    
+    toast.classList.add('show');
+    
+    // Hide after 3 seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  // Format date safely
+  function formatDate(timestamp) {
+    if (!timestamp) return 'Unknown date';
+    
+    try {
+      // Check if it's a Firestore Timestamp
+      if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+        return timestamp.toDate().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+      
+      // Check if it's a regular Date object
+      if (timestamp instanceof Date) {
+        return timestamp.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+      
+      // If it's a string or number, try to parse it
+      const date = new Date(timestamp);
+      if (!isNaN(date.getTime())) {
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+      
+      return 'Invalid date';
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Date error';
+    }
+  }
+
+  // 🔐 AUTH STATE
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      document.getElementById("loginContainer").style.display = "none";
+      document.getElementById("adminPanel").style.display = "block";
+      document.getElementById("userInfo").style.display = "flex";
+      document.getElementById("userAvatar").textContent = user.email.charAt(0).toUpperCase();
+      loadKeys();
+    } else {
+      document.getElementById("loginContainer").style.display = "block";
+      document.getElementById("adminPanel").style.display = "none";
+      document.getElementById("userInfo").style.display = "none";
+    }
+  });
+
+  // 🔑 LOGIN
+  window.login = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    
+    if (!email || !password) {
+      showToast("Please enter both email and password", "error");
+      return;
+    }
+    
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      showToast("Login successful!", "success");
+    } catch (e) {
+      console.error("Login error:", e);
+      showToast("Login failed. Please check your credentials.", "error");
+    }
+  };
+
+  // 🚪 LOGOUT
+  window.logout = async () => {
+    try {
+      await signOut(auth);
+      showToast("Logged out successfully", "success");
+    } catch (e) {
+      console.error("Logout error:", e);
+      showToast("Logout failed", "error");
+    }
+  };
+
+  // ➕ INSERT KEYS
+  window.insertKeys = async () => {
+    const keysInput = document.getElementById("keysInput");
+    const keys = keysInput.value
+      .split("\n")
+      .map(k => k.trim())
+      .filter(k => k);
+
+    if (keys.length === 0) {
+      showToast("Please enter at least one license key", "error");
+      return;
+    }
+
+    // Show loading
+    document.getElementById("loadingIndicator").style.display = "block";
+    
+    let insertedCount = 0;
+    for (const key of keys) {
+      try {
+        await setDoc(doc(db, "licenses", key), {
+          status: "decline",
+          deviceId: null,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        insertedCount++;
+      } catch (e) {
+        console.error("Error inserting key:", key, e);
+      }
+    }
+
+    keysInput.value = "";
+    
+    // Reload data from Firestore to get fresh timestamps
+    await loadKeys();
+    
+    showToast(`Successfully added ${insertedCount} license key(s)`, "success");
+  };
+
+  // CLEAR KEYS INPUT
+  window.clearKeysInput = () => {
+    document.getElementById("keysInput").value = "";
+  };
+
+  // 📥 LOAD KEYS
+  async function loadKeys() {
+    document.getElementById("loadingIndicator").style.display = "block";
+    document.getElementById("emptyState").style.display = "none";
+    
+    try {
+      const snap = await getDocs(licensesRef);
+      allLicenses = [];
+      
+      snap.forEach(d => {
+        const data = d.data();
+        allLicenses.push({
+          id: d.id,
+          ...data
+        });
+      });
+      
+      updateStats();
+      renderLicenses();
+    } catch (error) {
+      console.error("Error loading keys:", error);
+      showToast("Failed to load license keys", "error");
+    } finally {
+      document.getElementById("loadingIndicator").style.display = "none";
+    }
+  }
+
+  // UPDATE STATS
+  function updateStats() {
+    const total = allLicenses.length;
+    const active = allLicenses.filter(l => l.status === "allow").length;
+    const inactive = allLicenses.filter(l => l.status === "decline").length;
+    
+    document.getElementById("totalLicenses").textContent = total;
+    document.getElementById("activeLicenses").textContent = active;
+    document.getElementById("inactiveLicenses").textContent = inactive;
+  }
+
+  // RENDER LICENSES
+  function renderLicenses() {
+    // Apply filters
+    let filtered = [...allLicenses];
+    
+    if (currentFilter !== 'all') {
+      filtered = filtered.filter(l => l.status === currentFilter);
+    }
+    
+    if (currentSearch) {
+      const searchLower = currentSearch.toLowerCase();
+      filtered = filtered.filter(l => 
+        l.id.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    // Update UI
+    if (filtered.length === 0) {
+      document.getElementById("emptyState").style.display = "block";
+      document.getElementById("licenseList").innerHTML = "";
+      return;
+    }
+    
+    document.getElementById("emptyState").style.display = "none";
+    
+    // Sort by creation date (newest first)
+    filtered.sort((a, b) => {
+      const dateA = a.createdAt ? (a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt)) : new Date(0);
+      const dateB = b.createdAt ? (b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt)) : new Date(0);
+      return dateB - dateA;
+    });
+    
+    // Render cards
+    const licenseList = document.getElementById("licenseList");
+    licenseList.innerHTML = "";
+    
+    filtered.forEach(license => {
+      const card = document.createElement("div");
+      card.className = "card";
+      
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="card-title">${license.id}</div>
+          <div class="status-badge ${license.status === 'allow' ? 'status-allow' : 'status-decline'}">
+            ${license.status === 'allow' ? 'Active' : 'Inactive'}
+          </div>
+        </div>
+        
+        <div class="card-details">
+          <div class="detail-item">
+            <span class="detail-label">Created</span>
+            <span class="detail-value">${formatDate(license.createdAt)}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Last Updated</span>
+            <span class="detail-value">${formatDate(license.updatedAt) || 'Never'}</span>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          ${license.status === 'decline' ? 
+            `<button class="btn btn-success" onclick="activateLicense('${license.id}')">
+              <i class="fas fa-check"></i> Activate
+            </button>` : 
+            `<button class="btn btn-danger" onclick="deactivateLicense('${license.id}')">
+              <i class="fas fa-ban"></i> Deactivate
+            </button>`
+          }
+          <button class="btn btn-outline" onclick="showLicenseDetails('${license.id}')">
+            <i class="fas fa-info-circle"></i> Details
+          </button>
+        </div>
+      `;
+      
+      licenseList.appendChild(card);
+    });
+  }
+
+  // SET FILTER
+  window.setFilter = (filter) => {
+    currentFilter = filter;
+    
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    event.target.classList.add('active');
+    
+    renderLicenses();
+  };
+
+  // FILTER LICENSES
+  window.filterLicenses = () => {
+    currentSearch = document.getElementById("searchInput").value;
+    renderLicenses();
+  };
+
+  // ACTIVATE LICENSE
+  window.activateLicense = async (key) => {
+    try {
+      await updateDoc(doc(db, "licenses", key), { 
+        status: 'allow',
+        updatedAt: serverTimestamp()
+      });
+      
+      // Update local data immediately
+      const licenseIndex = allLicenses.findIndex(l => l.id === key);
+      if (licenseIndex !== -1) {
+        allLicenses[licenseIndex].status = 'allow';
+        allLicenses[licenseIndex].updatedAt = new Date(); // Temporary local update
+      }
+      
+      updateStats();
+      renderLicenses();
+      showToast(`License ${key} activated successfully`, "success");
+    } catch (error) {
+      console.error("Error activating license:", error);
+      showToast("Error activating license", "error");
+    }
+  };
+
+  // DEACTIVATE LICENSE
+  window.deactivateLicense = async (key) => {
+    try {
+      await updateDoc(doc(db, "licenses", key), { 
+        status: 'decline',
+        updatedAt: serverTimestamp()
+      });
+      
+      // Update local data immediately
+      const licenseIndex = allLicenses.findIndex(l => l.id === key);
+      if (licenseIndex !== -1) {
+        allLicenses[licenseIndex].status = 'decline';
+        allLicenses[licenseIndex].updatedAt = new Date(); // Temporary local update
+      }
+      
+      updateStats();
+      renderLicenses();
+      showToast(`License ${key} deactivated successfully`, "success");
+    } catch (error) {
+      console.error("Error deactivating license:", error);
+      showToast("Error deactivating license", "error");
+    }
+  };
+
+  // SHOW LICENSE DETAILS
+  window.showLicenseDetails = (key) => {
+    const license = allLicenses.find(l => l.id === key);
+    if (!license) return;
+    
+    const createdAt = formatDate(license.createdAt);
+    const updatedAt = formatDate(license.updatedAt);
+    
+    const details = `
+License Key: ${license.id}
+Status: ${license.status === 'allow' ? 'Active' : 'Inactive'}
+Created: ${createdAt}
+${updatedAt !== 'Never' ? `Last Updated: ${updatedAt}` : 'Last Updated: Never'}
+Device ID: ${license.deviceId || 'Not assigned'}
+    `.trim();
+    
+    alert(details);
+  };
+
+  // Initialize filter buttons
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set up filter button event listeners if they exist
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

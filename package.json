@@ -1,0 +1,14 @@
+{
+  "name": "floorsync-2d-addon",
+  "version": "1.0.0",
+  "description": "FloorSync 2D Home Assistant Add-on",
+  "main": "server.js",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
