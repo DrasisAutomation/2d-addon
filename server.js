@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 1337;
+const PORT = process.env.PORT || 1336;
 
 // Allow Home Assistant iframe
 app.use((req, res, next) => {
