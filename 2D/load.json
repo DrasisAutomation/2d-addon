@@ -401,7 +401,7 @@
           "entityType": "switch",
           "textColor": "#ffffff",
           "bgColor": "#ff0000",
-          "entityId": "switch.attlantic_room_ac_on",
+          "entityId": "switch.inwall_ht_ac_24_v1_18",
           "service": "switch.toggle",
           "command": ""
         },
@@ -411,7 +411,7 @@
           "entityType": "switch",
           "textColor": "#000000",
           "bgColor": "#ffffff",
-          "entityId": "switch.attlantic_room_ac_off",
+          "entityId": "switch.inwall_ht_ac_off_v1_18",
           "service": "switch.toggle",
           "command": ""
         },
@@ -421,7 +421,17 @@
           "entityType": "switch",
           "textColor": "#0062ff",
           "bgColor": "#ffffff",
-          "entityId": "switch.attlantic_room_ac_temp_20",
+          "entityId": "switch.inwall_ht_ac_20_v1_18",
+          "service": "switch.toggle",
+          "command": ""
+        },
+        {
+          "icon": "climate.svg",
+          "text": "22 C",
+          "entityType": "switch",
+          "textColor": "#00ccff",
+          "bgColor": "#ffffff",
+          "entityId": "switch.inwall_ht_ac_22_v1_18",
           "service": "switch.toggle",
           "command": ""
         },
@@ -429,19 +439,9 @@
           "icon": "climate.svg",
           "text": "24 C",
           "entityType": "switch",
-          "textColor": "#00ccff",
-          "bgColor": "#ffffff",
-          "entityId": "switch.attlantic_room_ac_on",
-          "service": "switch.toggle",
-          "command": ""
-        },
-        {
-          "icon": "climate.svg",
-          "text": "25 C",
-          "entityType": "switch",
           "textColor": "#ffbb00",
           "bgColor": "#ffffff",
-          "entityId": "switch.attlantic_room_ac_temp_25",
+          "entityId": "switch.inwall_ht_ac_24_v1_18 ",
           "service": "switch.toggle",
           "command": ""
         }
