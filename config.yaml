@@ -1,7 +1,7 @@
-name: FloorSync 2D
-slug: floorsync_2d
+name: Domotics 2D
+slug: domotics_2d
 version: "1.0.0"
-description: FloorSync 2D Control Panel
+description: Domotics 2D Control Panel
 
 arch:
   - amd64
@@ -13,9 +13,9 @@ startup: application
 boot: auto
 
 ingress: true
-ingress_port: 1336
+ingress_port: 1337
 panel_icon: mdi:floor-plan
-panel_title: FloorSync 2D
+panel_title: Domotics 2D
 
 host_network: false
 init: false

@@ -1,7 +1,7 @@
 {
-  "name": "floorsync-2d-addon",
+  "name": "domotics-2d-addon",
   "version": "1.0.0",
-  "description": "FloorSync 2D Home Assistant Add-on",
+  "description": "Domotics 2D Home Assistant Add-on",
   "main": "server.js",
   "private": true,
   "license": "MIT",
