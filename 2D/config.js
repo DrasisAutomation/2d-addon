@@ -2,15 +2,15 @@
 const CONFIG = {
   // Remote configuration (default)
   remote: {
-    WS_URL: "wss://demo.lumihomepro1.com/api/websocket",
-    TOKEN: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzNGNlNThiNDk1Nzk0NDVmYjUxNzE2NDA0N2Q0MGNmZCIsImlhdCI6MTc2NTM0NzQ5MSwiZXhwIjoyMDgwNzA3NDkxfQ.Se5PGwx0U9aqyVRnD1uwvCv3F-aOE8H53CKA5TqsV7U"
+    WS_URL: "wss://URL_HOME ASSISTANT/api/websocket",
+    TOKEN: "LONG LIVE TOKEN"
   },
   
   // Local configuration - SET YOUR LOCAL VALUES HERE
   local: {
-    WS_URL: "ws://192.168.2.25:8123/api/websocket",  
-    TOKEN: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzNGNlNThiNDk1Nzk0NDVmYjUxNzE2NDA0N2Q0MGNmZCIsImlhdCI6MTc2NTM0NzQ5MSwiZXhwIjoyMDgwNzA3NDkxfQ.Se5PGwx0U9aqyVRnD1uwvCv3F-aOE8H53CKA5TqsV7U"
- },
+    WS_URL: "ws://IP_HOME ASSISTANT/api/websocket",  
+    TOKEN: "LONG LIVE TOKEN"
+     },
    
   // Current mode (will be set by user choice)
   currentMode: null
