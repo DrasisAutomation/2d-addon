@@ -1,6 +1,6 @@
 {
   "name": "domotics-2d-addon",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Domotics 2D Home Assistant Add-on",
   "main": "server.js",
   "private": true,
