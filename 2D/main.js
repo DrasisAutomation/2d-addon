@@ -75,7 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalValue = document.getElementById("modalValue")
 
     const STORAGE_KEY = "floorplan_design_v2.0"
-    const DEFAULT_LOAD_FILE = "load.json"
+    const DEFAULT_LOAD_FILE = "load1.json"
+    const LOAD_PAGE_FILES = ["load1.json", "load2.json", "load3.json"]
+    let currentLoadPage = 1
 
     let scale = 1
     const maxScale = 5
@@ -735,6 +737,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function loadDesignFromURL(url) {
+        currentLoadPage = getPageFromFileName(url)
+        setActiveNavPage(currentLoadPage)
+
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch(url)
@@ -1151,16 +1156,19 @@ function updateFooter(text) {
     // Store the current text before rebuilding
     const currentText = text || 'Ready';
 
+    const navItems = LOAD_PAGE_FILES.map((file, index) => {
+        const page = index + 1
+        const activeClass = page === currentLoadPage ? 'active' : ''
+        return `
+              <a href="#" class="nav-square ${activeClass}" data-load-file="${file}" data-page="${page}">${page}</a>`
+    }).join('')
+
     footer.innerHTML = `
       <div style="display: flex; align-items: center; gap: 10px; width: 100%; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 12px; color: #aaa;">${connectionStatus}</span>
-          <div class="nav-container" style="display:none;">
-            <div class="nav-scroll">
-            <a href="index1.html" class="nav-square">1</a>
-            <a href="index2.html" class="nav-square">2</a>
-            <a href="index3.html" class="nav-square">3</a>
-            <a href="index4.html" class="nav-square">4</a>
+          <div class="nav-container" style="display: flex;">
+            <div class="nav-scroll">${navItems}
             </div>
           </div>
         </div>
@@ -1216,6 +1224,34 @@ function reattachFooterListeners() {
         
         freshSwitchBtn.addEventListener("click", handleSwitchConnection);
     }
+
+    const navButtons = document.querySelectorAll(".nav-square[data-load-file]");
+    navButtons.forEach((navButton) => {
+        navButton.addEventListener("click", (event) => {
+            event.preventDefault()
+            const targetFile = navButton.dataset.loadFile
+            const targetPage = Number(navButton.dataset.page) || 1
+
+            if (!targetFile) return
+
+            currentLoadPage = targetPage
+            setActiveNavPage(currentLoadPage)
+            loadDesignFromURL(targetFile)
+        })
+    })
+}
+
+function setActiveNavPage(page) {
+    currentLoadPage = page
+    document.querySelectorAll(".nav-square[data-load-file]").forEach((button) => {
+        const buttonPage = Number(button.dataset.page) || 0
+        button.classList.toggle("active", buttonPage === page)
+    })
+}
+
+function getPageFromFileName(fileName) {
+    const match = /load(\d+)\.json$/i.exec(fileName)
+    return match ? Number(match[1]) : currentLoadPage
 }
 
     // Add this handler function for switching connections
